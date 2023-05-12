@@ -16,6 +16,7 @@ function Duck:update(dt)
 end
 
 function Duck:render()
+    love.graphics.setColor(23 / 255, 173 / 255, 152 / 255, 1)
     love.graphics.rectangle("line", V_width - self.x, V_height - FloorHeight - 10, 10, 10)
 end
 

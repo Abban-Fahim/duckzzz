@@ -5,7 +5,7 @@ function Player:init()
     self.dy = 0               -- px/s
     self.a = -0.4 * GameSpeed -- px/s^2
     self.jumping = false
-    self.sprite = love.graphics.newImage('Assets/purple.png')
+    self.sprite = love.graphics.newImage('assets/purple.png')
 end
 
 function Player:update(dt)

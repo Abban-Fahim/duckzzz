@@ -1,7 +1,7 @@
-push = require "push"
-Class = require "class"
-require "Player"
-require "Duck"
+push = require "lib.push"
+Class = require "lib.class"
+require "classes.Player"
+require "classes.Duck"
 
 -- Global constants
 W_width = 1280
@@ -29,7 +29,9 @@ end
 function love.draw()
     push:apply("start")
 
-    love.graphics.setColor(.5, .5, .5)
+
+    love.graphics.setBackgroundColor(46 / 255, 42 / 255, 49 / 255, 0.5)
+    love.graphics.setColor(216 / 255, 215 / 255, 218 / 255)
     love.graphics.rectangle("fill", 10, V_height - FloorHeight, V_width - 20, FloorHeight - 10)
     player:render()
     for i, duck in ipairs(ducks) do
