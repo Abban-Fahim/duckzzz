@@ -1,14 +1,27 @@
-on: push
+on:
+  push:
+  workflow_dispatch:
+
 jobs:
-  build-android:
+  build:
     name: Build love android
     id: build-love
-    uses: love-actions/love-actions-android@v1
+    uses: love-actions/love-actions-android/.github/workflows/action.yml@v1
     with:
-      app-name: "duckzzz"
-      bundle-id: "com.abbanf.duckzzz"
-      resource-path: "./assets"
+      app-name: "My Love Game"
+      bundle-id: "org.love2d.my_game"
+      resource-path: "./assets/android/res"
+      icon-specifier: "@mipmap/app"
+      love-ref: "0b0ff5551fae8b2079749481cd2b54adbbb25bd"
+      love-patch: "./love.patch"
+      love-package: "./game.love"
+      libs-path: "./assets/android/libs"
       extra-assets: ./README.md ./license.txt
-      product-name: "duckzzz"
-      version-string: "1.0.0"
-      version-code: 1
+      product-name: "my-game"
+      version-string: "2.3.4"
+      version-code: 234
+      output-folder: "./dist"
+      keystore-alias: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+      keystore-base64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      keystore-key-password: ${{ secrets.ANDROID_KEYSTORE_KEYPASSWORD }}
+      keystore-store-password: ${{ secrets.ANDROID_KEYSTORE_STOREPASSWORD }}
