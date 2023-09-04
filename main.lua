@@ -1,5 +1,7 @@
 push = require "lib.push"
 Class = require "lib.class"
+require "classes.util"
+require "classes.Sprite"
 require "classes.Player"
 require "classes.Duck"
 
@@ -12,27 +14,46 @@ ScreenRatio = V_height / W_height
 FloorHeight = 32
 GameSpeed = 5
 
+touch_jump = false
+
 
 function love.load()
-    player = Player()
-    ducks = { Duck(1) }
+    os = love.system.getOS()
+    fullscreenOption = false
 
     -- setup code
+    if os == "Android" then
+        fullscreenOption = true
+        W_width, W_height = love.window.getDesktopDimensions()
+    end
     love.graphics.setDefaultFilter("nearest", "nearest")
     push:setupScreen(V_width, V_height, W_width, W_height, {
-        fullscreen = false,
+        fullscreen = fullscreenOption,
         resizable = false,
-        vsync = true
+        highdpi = false,
+        upscale = "pixel-perfect"
     })
+
+    duckImage = love.graphics.newImage("assets/duck.png")
+    player = Player()
+    ducks = { Duck(1) }
+    local song = love.audio.newSource("assets/chip-tal.wav", "stream")
+    song:play()
+    song:setLooping(true)
 end
 
 function love.draw()
     push:apply("start")
 
-
-    love.graphics.setBackgroundColor(46 / 255, 42 / 255, 49 / 255, 0.5)
+    -- UI stuff
+    love.graphics.clear(46 / 255, 42 / 255, 49 / 255, 1)
     love.graphics.setColor(216 / 255, 215 / 255, 218 / 255)
     love.graphics.rectangle("fill", 10, V_height - FloorHeight, V_width - 20, FloorHeight - 10)
+
+    --if os = "Android" then
+    love.graphics.rectangle(touch_jump and "fill" or "line", V_width - 25, V_height - FloorHeight - 25, 20, 20)
+    --end
+
     player:render()
     for i, duck in ipairs(ducks) do
         duck:render()
@@ -44,23 +65,40 @@ end
 function love.update(dt)
     player:update(dt)
     for i, duck in ipairs(ducks) do
-        if duck.alive then
-            duck:update(dt)
+        if not duck.alive or checkCollision(duck, player) then
+            table.remove(ducks, i)
         else
-            duck:remove(ducks)
+            duck:update(dt)
         end
-        print(duck.x, duck.index)
+    end
+
+    rand = math.random()
+    if rand > 0.9 then
+        table.insert(ducks, Duck(#ducks + 1))
     end
 end
 
 function love.keypressed(key)
-    if (key == "up" or key == "space") and player.y <= FloorHeight then
-        player.dy = player.dy + 2
-        player.jumping = true
+    if (key == "up" or key == "space") and not player.jumping then
+        player:jump()
     elseif key == "escape" then
         love.event.quit()
-    elseif key == "d" then
-        print(#ducks, "DDDD")
-        table.insert(ducks, Duck(#ducks + 1))
     end
+end
+
+function love.touchpressed(id, x, y)
+    x, y = push:toGame(x, y)
+    print(x, y)
+    if x > V_width - 25 and x < V_width - 5 and y > V_height - FloorHeight - 25 and y < V_height - FloorHeight - 5 then
+        touch_jump = true
+        if not player.jumping then
+            player:jump()
+        end
+    else
+        touch_jump = false
+    end
+end
+
+function love.resize(w, h)
+    push:resize(w, h)
 end

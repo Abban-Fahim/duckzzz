@@ -1,28 +1,37 @@
-Duck = Class {}
+Duck = Class { __includes = Sprite {} }
 
 function Duck:init(index)
     self.index = index
-    self.x = 0
+    self.height = 32
+    self.width = 32
+    self.sprite = duckImage
+    self.y = math.random(V_height - FloorHeight - self.height, V_height - FloorHeight - self.height - 100)
+    self.x = V_width
     self.dx = 0
     self.alive = true
 end
 
 function Duck:update(dt)
-    if self.x > (V_width - 10) then
+    if self.x < -self.width then
+        print(self.index, "missed")
         self.alive = false
     end
-    self.dx = GameSpeed * 25
-    self.x = math.floor(self.x + self.dx * dt)
+    self.dx = GameSpeed * 25 * dt
+    self.x = math.floor(self.x - self.dx)
 end
 
 function Duck:render()
-    love.graphics.setColor(23 / 255, 173 / 255, 152 / 255, 1)
-    love.graphics.rectangle("line", V_width - self.x, V_height - FloorHeight - 10, 10, 10)
+    love.graphics.draw(self.sprite, self.x, self.y)
+    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
 end
 
-function Duck:remove(ducksArray)
-    table.remove(ducksArray, self.index)
-    for i, duck in ipairs(ducksArray) do
-        duck.index = duck.index - 1
-    end
-end
+-- function Duck:remove(ducksArray)
+--     print("gg")
+--     -- TO FIXXXX !!
+--     -- table.remove(ducksArray, self.index)
+--     for i, duck in ipairs(ducksArray) do
+--         ducksArray[duck.index - 1] = duck;
+--         duck.index = duck.index - 1
+--     end
+--     print(debug(ducksArray))
+-- end

@@ -14,7 +14,6 @@ local windowUpdateMode = love11 and love.window.updateMode or function(width, he
 end
 
 local push = {
-
     defaults = {
         fullscreen = false,
         resizable = false,
@@ -23,7 +22,6 @@ local push = {
         canvas = true,
         stencil = true
     }
-
 }
 setmetatable(push, push)
 
@@ -36,14 +34,13 @@ end
 function push:resetSettings() return self:applySettings(self.defaults) end
 
 function push:setupScreen(WWIDTH, WHEIGHT, RWIDTH, RHEIGHT, settings)
-
     settings = settings or {}
 
     self._WWIDTH, self._WHEIGHT = WWIDTH, WHEIGHT
     self._RWIDTH, self._RHEIGHT = RWIDTH, RHEIGHT
 
     self:applySettings(self.defaults) --set defaults first
-    self:applySettings(settings) --then fill with custom settings
+    self:applySettings(settings)    --then fill with custom settings
 
     windowUpdateMode(self._RWIDTH, self._RHEIGHT, {
         fullscreen = self._fullscreen,
@@ -143,11 +140,10 @@ function push:start()
     if self._canvas then
         love.graphics.push()
         love.graphics.setCanvas({ self.canvases[1].canvas, stencil = self.canvases[1].stencil })
-
     else
         love.graphics.translate(self._OFFSET.x, self._OFFSET.y)
         love.graphics.setScissor(self._OFFSET.x, self._OFFSET.y, self._WWIDTH * self._SCALE.x,
-            self._WHEIGHT * self._SCALE.y)
+        self._WHEIGHT * self._SCALE.y)
         love.graphics.push()
         love.graphics.scale(self._SCALE.x, self._SCALE.y)
     end
