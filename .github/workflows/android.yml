@@ -1,0 +1,11 @@
+- name: Build love android
+  id: build-love
+  uses: love-actions/love-actions-android@v1
+  with:
+    app-name: "duckzzz"
+    bundle-id: "com.abbanf.duckzzz"
+    resource-path: "./assets"
+    extra-assets: ./README.md ./license.txt
+    product-name: "duckzzz"
+    version-string: "1.0.0"
+    version-code: 1
