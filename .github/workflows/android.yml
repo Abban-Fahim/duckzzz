@@ -6,7 +6,7 @@ jobs:
   build:
     name: Build love android
     id: build-love
-    uses: love-actions/love-actions-android/.github/workflows/action.yml@v1
+    uses: Abban-Fahim/love-actions-android/.github/workflows/action.yml@main
     with:
       app-name: "My Love Game"
       bundle-id: "org.love2d.my_game"
